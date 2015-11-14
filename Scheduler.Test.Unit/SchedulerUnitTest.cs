@@ -101,6 +101,24 @@ namespace Scheduler.Test.Unit
             Assert.That(ex.Message, Is.EqualTo("No active threads!"));
         }
 
+        [Test]
+        public void Kill_2ThreadsFound_Schedule()
+        {
+            _uut.Spawn("Apple", SchedulerHandout.Scheduler.Priority.Med);
+            _uut.Spawn("Magic", SchedulerHandout.Scheduler.Priority.High);
+            _uut.Schedule();
+            _uut.Kill("Magic");
+            Assert.That(_uut.NThreads, Is.EqualTo(0));
+        }
+        [Test]
+        public void Kill_1ThreadFoundSameName_Schedule()
+        {
+            _uut.Spawn("Magic", SchedulerHandout.Scheduler.Priority.High);
+            _uut.Schedule();
+            _uut.Kill("Magic");
+            Assert.That(_uut.NThreads, Is.EqualTo(0));
+        }
+
         #endregion
 
         #region SetPriority
