@@ -29,8 +29,7 @@ namespace Scheduler.Test.Unit
         }
 
         #endregion
-
-
+        
         #region Schedule
 
         [Test]
@@ -74,8 +73,7 @@ namespace Scheduler.Test.Unit
         }
 
         #endregion
-
-
+        
         #region Kill
 
         [Test]
@@ -191,6 +189,55 @@ namespace Scheduler.Test.Unit
         }
 
         #endregion
+
+        #region GetNThreads
+
+        [Test]
+        public void GetNThreads_Spawn3High_return3()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.High);
+            _uut.Spawn("Nanna", SchedulerHandout.Scheduler.Priority.High);
+            _uut.Spawn("Jeba", SchedulerHandout.Scheduler.Priority.High);
+            Assert.That(_uut.GetNThreads(SchedulerHandout.Scheduler.Priority.High), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void GetNThreads_Spawn3Med_return3()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.Med);
+            _uut.Spawn("Nanna", SchedulerHandout.Scheduler.Priority.Med);
+            _uut.Spawn("Jeba", SchedulerHandout.Scheduler.Priority.Med);
+            Assert.That(_uut.GetNThreads(SchedulerHandout.Scheduler.Priority.Med), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void GetNThreads_Spawn3Low_return3()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.Low);
+            _uut.Spawn("Nanna", SchedulerHandout.Scheduler.Priority.Low);
+            _uut.Spawn("Jeba", SchedulerHandout.Scheduler.Priority.Low);
+            Assert.That(_uut.GetNThreads(SchedulerHandout.Scheduler.Priority.Low), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void GetNThreads_Spawn3Low2High_return2High()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.Low);
+            _uut.Spawn("Nanna", SchedulerHandout.Scheduler.Priority.Low);
+            _uut.Spawn("Jeba", SchedulerHandout.Scheduler.Priority.Low);
+            _uut.Spawn("Computer", SchedulerHandout.Scheduler.Priority.High);
+            _uut.Spawn("Raspberry", SchedulerHandout.Scheduler.Priority.High);
+            Assert.That(_uut.GetNThreads(SchedulerHandout.Scheduler.Priority.High), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void GetNThreads_spawn0_return0()
+        {
+            Assert.That(_uut.GetNThreads(SchedulerHandout.Scheduler.Priority.High), Is.EqualTo(0));
+        }
+
+        #endregion
+
 
     }
 }
