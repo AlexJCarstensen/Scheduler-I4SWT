@@ -139,6 +139,58 @@ namespace Scheduler.Test.Unit
             _uut.Schedule();
             Assert.That(_uut.ActiveThread, Is.EqualTo("Jeba"));
         }
-#endregion
+        #endregion
+
+        #region GetPriority
+
+        [Test]
+        public void GetPrio_threadAlex_returnHigh()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.High);
+            Assert.That(_uut.GetPriority("Alex"), Is.EqualTo(SchedulerHandout.Scheduler.Priority.High));
+        }
+
+        [Test]
+        public void GetPrio_threadAlex_returnMed()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.Med);
+            Assert.That(_uut.GetPriority("Alex"), Is.EqualTo(SchedulerHandout.Scheduler.Priority.Med));
+        }
+
+        [Test]
+        public void GetPrio_threadAlex_returnLow()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.Low);
+            Assert.That(_uut.GetPriority("Alex"), Is.EqualTo(SchedulerHandout.Scheduler.Priority.Low));
+        }
+
+        [Test]
+        public void GetPrio_threadNanna_ThrowException()
+        {
+            Assert.Throws<ThreadNotFoundExceoption>(() => _uut.GetPriority("Nanna"));
+        }
+
+        #endregion
+
+        #region ReName
+
+        [Test]
+        public void ReName_AlextoNanna_SpawnNewNanna_ThrowAlreadyExist()
+        {
+            _uut.Spawn("Alex", SchedulerHandout.Scheduler.Priority.High);
+            _uut.Rename("Alex", "Nanna");
+            Assert.Throws<ThreadAlreadyExistException>(
+                () => _uut.Spawn("Nanna", SchedulerHandout.Scheduler.Priority.High));
+        }
+
+        [Test]
+        public void ReName_AlextoNanna_ThrowNameDoesNotExist()
+        {
+            Assert.Throws<ThreadNotFoundExceoption>(
+                () => _uut.Rename("Alex", "Nanna"));
+        }
+
+        #endregion
+
     }
 }
